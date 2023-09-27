@@ -250,6 +250,9 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                 }
 
                 ItemStack item = player.getInventory().getItemInMainHand();
+                item = item.clone();
+                item.setAmount(1);
+
                 if (item.getType().isAir()) {   // empty
                     ItemStack nowItem = trigger.item;
                     if (nowItem == null) {
@@ -276,7 +279,7 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                         return true;
                     }
 
-                    trigger.item = item.clone();
+                    trigger.item = item;
 
                     DataManager.save();
                     tinkle(player);

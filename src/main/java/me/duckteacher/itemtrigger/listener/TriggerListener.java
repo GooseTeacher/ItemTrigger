@@ -40,6 +40,9 @@ public class TriggerListener implements Listener {
         if (item == null || item.getType().isAir())
             return;
 
+        item = item.clone();
+        item.setAmount(1);
+
         Trigger trigger = Trigger.getTrigger(item);
         if (trigger == null)
             return;
