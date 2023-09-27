@@ -1,17 +1,17 @@
-package me.duckteacher.itemtrigger;
+package me.duckteacher.pxitemtrigger;
 
-import me.duckteacher.itemtrigger.command.ItemTriggerCommand;
-import me.duckteacher.itemtrigger.command.ItreloadCommand;
-import me.duckteacher.itemtrigger.file.DataManager;
-import me.duckteacher.itemtrigger.listener.TriggerListener;
+import me.duckteacher.pxitemtrigger.command.ItemTriggerCommand;
+import me.duckteacher.pxitemtrigger.command.ItreloadCommand;
+import me.duckteacher.pxitemtrigger.file.DataManager;
+import me.duckteacher.pxitemtrigger.listener.TriggerListener;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
 
-public final class ItemTrigger extends JavaPlugin {
-    public static ItemTrigger instance;
+public final class PXItemTrigger extends JavaPlugin {
+    public static PXItemTrigger instance;
     public static Logger logger;
 
     @Override
@@ -43,7 +43,7 @@ public final class ItemTrigger extends JavaPlugin {
         DataManager.save();
     }
 
-    public static ItemTrigger getInstance() {
+    public static PXItemTrigger getInstance() {
         return instance;
     }
 }

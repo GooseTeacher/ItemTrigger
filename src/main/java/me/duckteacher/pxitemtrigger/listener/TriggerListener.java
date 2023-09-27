@@ -1,8 +1,8 @@
-package me.duckteacher.itemtrigger.listener;
+package me.duckteacher.pxitemtrigger.listener;
 
-import me.duckteacher.itemtrigger.util.trigger.Trigger;
-import me.duckteacher.itemtrigger.util.trigger.TriggerCommand;
-import me.duckteacher.itemtrigger.util.trigger.TriggerType;
+import me.duckteacher.pxitemtrigger.util.trigger.Trigger;
+import me.duckteacher.pxitemtrigger.util.trigger.TriggerCommand;
+import me.duckteacher.pxitemtrigger.util.trigger.TriggerType;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

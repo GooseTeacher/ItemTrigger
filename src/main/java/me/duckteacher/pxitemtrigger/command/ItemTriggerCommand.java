@@ -1,9 +1,9 @@
-package me.duckteacher.itemtrigger.command;
+package me.duckteacher.pxitemtrigger.command;
 
-import me.duckteacher.itemtrigger.file.DataManager;
-import me.duckteacher.itemtrigger.util.trigger.Trigger;
-import me.duckteacher.itemtrigger.util.trigger.TriggerCommand;
-import me.duckteacher.itemtrigger.util.trigger.TriggerType;
+import me.duckteacher.pxitemtrigger.file.DataManager;
+import me.duckteacher.pxitemtrigger.util.trigger.Trigger;
+import me.duckteacher.pxitemtrigger.util.trigger.TriggerCommand;
+import me.duckteacher.pxitemtrigger.util.trigger.TriggerType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;

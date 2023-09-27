@@ -1,4 +1,4 @@
-package me.duckteacher.itemtrigger.util.trigger;
+package me.duckteacher.pxitemtrigger.util.trigger;
 
 public class TriggerCommand {
     public String command;

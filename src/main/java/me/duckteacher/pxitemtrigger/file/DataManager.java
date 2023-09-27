@@ -1,9 +1,9 @@
-package me.duckteacher.itemtrigger.file;
+package me.duckteacher.pxitemtrigger.file;
 
-import me.duckteacher.itemtrigger.ItemTrigger;
-import me.duckteacher.itemtrigger.util.trigger.Trigger;
-import me.duckteacher.itemtrigger.util.trigger.TriggerCommand;
-import me.duckteacher.itemtrigger.util.trigger.TriggerType;
+import me.duckteacher.pxitemtrigger.PXItemTrigger;
+import me.duckteacher.pxitemtrigger.util.trigger.Trigger;
+import me.duckteacher.pxitemtrigger.util.trigger.TriggerCommand;
+import me.duckteacher.pxitemtrigger.util.trigger.TriggerType;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.util.HashSet;
 
 public class DataManager {
-    private static final File DIR = ItemTrigger.getInstance().getDataFolder();
+    private static final File DIR = PXItemTrigger.getInstance().getDataFolder();
 
     static {
         if (!DIR.exists() || !DIR.isDirectory()) {
             if (!DIR.mkdirs())
-                ItemTrigger.logger.severe("데이터 디렉토리 생성에 실패했습니다.");
+                PXItemTrigger.logger.severe("데이터 디렉토리 생성에 실패했습니다.");
         }
     }
 
@@ -28,11 +28,11 @@ public class DataManager {
         if (!dataFile.exists() || !dataFile.isFile()) {
             try {
                 if (!dataFile.createNewFile()) {
-                    ItemTrigger.logger.severe("콘피그 파일을 생성하지 못했습니다.");
+                    PXItemTrigger.logger.severe("콘피그 파일을 생성하지 못했습니다.");
                     return;
                 }
             } catch (IOException e) {
-                ItemTrigger.logger.severe("콘피그 파일 생성 도중 IOException이 발생했습니다.");
+                PXItemTrigger.logger.severe("콘피그 파일 생성 도중 IOException이 발생했습니다.");
                 return;
             }
         }
@@ -107,14 +107,14 @@ public class DataManager {
             try {
                 dataYaml.save(dataFile);
             } catch (IOException e) {
-                ItemTrigger.logger.severe("데이터를 저장하는 데 실패했습니다.");
+                PXItemTrigger.logger.severe("데이터를 저장하는 데 실패했습니다.");
             }
         }
 
         try {
             dataYaml.save(dataFile);
         } catch (IOException e) {
-            ItemTrigger.logger.severe("콘피그 파일 저장 도중 IOException이 발생했습니다.");
+            PXItemTrigger.logger.severe("콘피그 파일 저장 도중 IOException이 발생했습니다.");
         }
     }
 }

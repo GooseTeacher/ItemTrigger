@@ -1,4 +1,4 @@
-package me.duckteacher.itemtrigger.util.trigger;
+package me.duckteacher.pxitemtrigger.util.trigger;
 
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;

@@ -1,6 +1,6 @@
-package me.duckteacher.itemtrigger.command;
+package me.duckteacher.pxitemtrigger.command;
 
-import me.duckteacher.itemtrigger.file.DataManager;
+import me.duckteacher.pxitemtrigger.file.DataManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
