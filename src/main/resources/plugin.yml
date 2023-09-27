@@ -6,7 +6,7 @@ main: me.duckteacher.itemtrigger.ItemTrigger
 api-version: '1.20'
 commands:
   itemtrigger:
-    aliases: [it]
+    aliases: [it, 아이템트리거, 아트]
     description: Item Trigger Management Command
     usage: /itemtrigger
     permission: itemtrigger.*

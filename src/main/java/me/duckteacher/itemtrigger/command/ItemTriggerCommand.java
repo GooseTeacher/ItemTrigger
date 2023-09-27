@@ -29,24 +29,53 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
     private static final String PREFIX = "<gold>[IT] <reset>";
 
     //<editor-fold desc="Placeholders">
+    private static final Component mm_cmd = mm.deserialize("<hover:show_text:'<detail_cmd>'>/itemtrigger</hover>",
+            Placeholder.component("detail_cmd", mm.deserialize(
+                    "[<color:#ffdbb3>/it, /아이템트리거</color>] (으)로 교체 가능"
+            )));
+    private static final Component mm_cmd_create = mm.deserialize("<hover:show_text:'<detail_cmd_create>'>create</hover>",
+            Placeholder.component("detail_cmd_create", mm.deserialize(
+                    "[<color:#ffdbb3>생성</color>] (으)로 교체 가능"
+            )));
+    private static final Component mm_cmd_remove = mm.deserialize("<hover:show_text:'<detail_cmd_remove>'>remove</hover>",
+            Placeholder.component("detail_cmd_remove", mm.deserialize(
+                    "[<color:#ffdbb3>제거</color>] (으)로 교체 가능"
+            )));
+    private static final Component mm_cmd_item = mm.deserialize("<hover:show_text:'<detail_cmd_item>'>item</hover>",
+            Placeholder.component("detail_cmd_item", mm.deserialize(
+                    "[<color:#ffdbb3>아이템</color>] (으)로 교체 가능"
+            )));
+    private static final Component mm_cmd_command = mm.deserialize("<hover:show_text:'<detail_cmd_command>'>command</hover>",
+            Placeholder.component("detail_cmd_command", mm.deserialize(
+                    "[<color:#ffdbb3>명령어</color>] (으)로 교체 가능"
+            )));
+    private static final Component mm_cmd_delcmd = mm.deserialize("<hover:show_text:'<detail_cmd_delcmd>'>delcmd</hover>",
+            Placeholder.component("detail_cmd_delcmd", mm.deserialize(
+                    "[<color:#ffdbb3>명령어제거</color>] (으)로 교체 가능"
+            )));
+    private static final Component mm_cmd_rename = mm.deserialize("<hover:show_text:'<detail_cmd_rename>'>rename</hover>",
+            Placeholder.component("detail_cmd_rename", mm.deserialize(
+                    "[<color:#ffdbb3>이름</color>] (으)로 교체 가능"
+            )));
+
     private static final Component mm_name = mm.deserialize("<hover:show_text:'<detail_name>'>[이름]</hover>",
             Placeholder.component("detail_name", mm.deserialize(
                     "저장될 아이템 트리거의 이름"
             )));
     private static final Component mm_type = mm.deserialize("<hover:show_text:'<detail_type>'>[타입]</hover>",
             Placeholder.component("detail_type", mm.deserialize(
-                    "<red>left<reset>: 아이템을 들고 좌클릭 시 명령어 실행<newline>" +
-                            "<red>right<reset>: 아이템을 들고 우클릭 시 명령어 실행<newline>" +
-                            "<red>swap<reset>: 아이템을 들고 손 바꾸기(<key:key.swapOffhand>) 시 명령어 실행<newline>" +
-                            "<red>drop<reset>: 아이템을 떨어트릴 시 명령어 실행")));
+                    "<red>left<reset>: 아이템을 들고 좌클릭 시 명령어 실행<br>" +
+                            "<red>right<reset>: 아이템을 들고 우클릭 시 명령어 실행<br>" +
+                            "<red>swap<reset>: 아이템을 들고 손 바꾸기(<key:key.swapOffhand>) 시 명령어 실행"
+            )));
     private static final Component mm_force = mm.deserialize("<hover:show_text:'<detail_force>'>[강제 여부]</hover>",
             Placeholder.component("detail_force", mm.deserialize(
-                    "<red>true<reset>: 일시적으로 OP의 권한을 얻어 명령을 실행<newline>" +
+                    "<red>true<reset>: 일시적으로 OP의 권한을 얻어 명령을 실행<br>" +
                             "<red>false<reset>: 일반적인 상태에서 명령을 실행"
             )));
     private static final Component mm_command = mm.deserialize("<hover:show_text:'<detail_command>'>[명령어]</hover>",
             Placeholder.component("detail_command", mm.deserialize(
-                    "명령어는 슬래쉬(<red>/</red>)가 하나 포함된 채로 입력됨<newline>" +
+                    "명령어는 슬래쉬(<red>/</red>)가 하나 포함된 채로 입력됨<br>" +
                             "예시: <red>/</red>tp 명령어를 실행하고 싶다면 'tp' 입력"
             )));
     //</editor-fold>
@@ -67,16 +96,16 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
             else {
                 String triggerName = args[0];
                 if (Trigger.getTriggerByName(triggerName) == null)
-                    preComps.add("create");
+                    preComps.addAll(List.of("create", "생성"));
                 else
-                    preComps.addAll(List.of("remove", "item", "command", "delcmd", "rename"));
+                    preComps.addAll(List.of("remove", "item", "command", "delcmd", "rename", "제거", "아이템", "명령어", "명령어제거", "이름"));
             }
         }
         else {
             String triggerName = args[0];
             Trigger trigger = Trigger.getTriggerByName(triggerName);
             if (trigger != null) {
-                if (args[1].equalsIgnoreCase("command")) {
+                if (args[1].equalsIgnoreCase("command") || args[1].equals("명령어")) {
                     if (args.length == 3) {
                         for (TriggerType type : TriggerType.values())
                             preComps.add(type.name().toLowerCase());
@@ -84,17 +113,17 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                     else if (args.length == 4)
                         preComps.addAll(List.of("true", "false"));
                     else
-                        return List.of("<command>");
+                        return List.of("<명령어>");
                 }
-                else if (args[1].equalsIgnoreCase("delcmd")) {
+                else if (args[1].equalsIgnoreCase("delcmd") || args[1].equals("명령어제거")) {
                     if (args.length == 3) {
                         for (TriggerType type : TriggerType.values())
                             preComps.add(type.name().toLowerCase());
                     }
                 }
-                else if (args[1].equalsIgnoreCase("rename")) {
+                else if (args[1].equalsIgnoreCase("rename") || args[1].equals("이름")) {
                     if (args.length == 3)
-                        return List.of("<new_name>");
+                        return List.of("<새 이름>");
                 }
             }
         }
@@ -118,14 +147,18 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
         switch (page) {
             case 2 -> {
                 player.sendMessage(mm.deserialize(
-                        "  /itemtrigger <mm_name> command <mm_type> <mm_force><br>" +
+                        "  <mm_cmd> <mm_name> <mm_cmd_command> <mm_type> <mm_force><br>" +
                                 "    <gray>└ 등록된 명령어의 강제 여부를 설정합니다.</gray><br>" +
-                                "  /itemtrigger <mm_name> delcmd <mm_type><br>" +
+                                "  <mm_cmd> <mm_name> <mm_cmd_delcmd> <mm_type><br>" +
                                 "    <gray>└ 해당 타입에 등록된 명령어를 제거합니다.</gray><br>" +
-                                "  /itemtrigger <mm_name> rename [새 이름]<br>" +
+                                "  <mm_cmd> <mm_name> <mm_cmd_rename> [새 이름]<br>" +
                                 "    <gray>└ 해당 아이템 트리거의 이름을 변경합니다.</gray><br>" +
                                 "  /itreload<br>" +
                                 "    <gray>└ 아이템 트리거 설정을 새로고침 합니다.</gray>",
+                        Placeholder.component("mm_cmd", mm_cmd),
+                        Placeholder.component("mm_cmd_command", mm_cmd_command),
+                        Placeholder.component("mm_cmd_delcmd", mm_cmd_delcmd),
+                        Placeholder.component("mm_cmd_rename", mm_cmd_rename),
                         Placeholder.component("mm_name", mm_name),
                         Placeholder.component("mm_type", mm_type),
                         Placeholder.component("mm_force", mm_force)
@@ -133,17 +166,22 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
             }
             default ->
                     player.sendMessage(mm.deserialize(
-                            "  /itemtrigger ? [페이지(1~2)]<br>" +
+                            "  <mm_cmd> ? [페이지(1~2)]<br>" +
                                     "    <gray>└ 아이템 트리거 명령어 도움말을 확인합니다.</gray><br>" +
-                            "  /itemtrigger <mm_name> create<br>" +
+                            "  <mm_cmd> <mm_name> <mm_cmd_create><br>" +
                                     "    <gray>└ 새로운 아이템 트리거를 생성합니다.</gray><br>" +
-                            "  /itemtrigger <mm_name> remove<br>" +
+                            "  <mm_cmd> <mm_name> <mm_cmd_remove><br>" +
                                     "    <gray>└ 해당 아이템 트리거를 제거합니다.</gray><br>" +
-                            "  /itemtrigger <mm_name> item<br>" +
+                            "  <mm_cmd> <mm_name> <mm_cmd_item><br>" +
                                     "    <gray>└ 손에 든 아이템을 해당 아이템 트리거를 실행하는 아이템으로 설정합니다.</gray><br>" +
                                     "    <gray>└ 손에 아무것도 들고 있지 않다면 해당 아이템을 지급합니다.</gray><br>" +
-                            "  /itemtrigger <mm_name> command <mm_type> <mm_force> <mm_command><br>" +
+                            "  <mm_cmd> <mm_name> <mm_cmd_command> <mm_type> <mm_force> <mm_command><br>" +
                                     "    <gray>└ 해당 아이템 트리거의 명령어를 설정합니다.</gray>",
+                            Placeholder.component("mm_cmd", mm_cmd),
+                            Placeholder.component("mm_cmd_create", mm_cmd_create),
+                            Placeholder.component("mm_cmd_remove", mm_cmd_remove),
+                            Placeholder.component("mm_cmd_item", mm_cmd_item),
+                            Placeholder.component("mm_cmd_command", mm_cmd_command),
                             Placeholder.component("mm_name", mm_name),
                             Placeholder.component("mm_type", mm_type),
                             Placeholder.component("mm_force", mm_force),
@@ -179,10 +217,12 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
             String triggerName = args[0].toLowerCase();
             Trigger trigger = Trigger.getTriggerByName(triggerName);
 
-            if (args[1].equalsIgnoreCase("create")) {
+            if (args[1].equalsIgnoreCase("create") || args[1].equals("생성")) {
                 if (args.length != 2) {
-                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: /itemtrigger <mm_name> create",
-                            Placeholder.component("mm_name", mm_name))
+                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: <mm_cmd> <mm_name> <mm_cmd_create>",
+                            Placeholder.component("mm_cmd", mm_cmd),
+                            Placeholder.component("mm_name", mm_name),
+                            Placeholder.component("mm_cmd_create", mm_cmd_create))
                     );
                     return true;
                 }
@@ -208,10 +248,12 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                 return true;
             }
 
-            else if (args[1].equalsIgnoreCase("remove")) {
+            else if (args[1].equalsIgnoreCase("remove") || args[1].equals("제거")) {
                 if (args.length != 2) {
-                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: /itemtrigger <mm_name> remove",
-                            Placeholder.component("mm_name", mm_name))
+                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: <mm_cmd> <mm_name> <mm_cmd_remove>",
+                            Placeholder.component("mm_cmd", mm_cmd),
+                            Placeholder.component("mm_name", mm_name),
+                            Placeholder.component("mm_cmd_remove", mm_cmd_remove))
                     );
                     return true;
                 }
@@ -236,10 +278,12 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                 return true;
             }
 
-            else if (args[1].equalsIgnoreCase("item")) {
+            else if (args[1].equalsIgnoreCase("item") || args[1].equals("아이템")) {
                 if (args.length != 2) {
-                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: /itemtrigger <mm_name> item",
-                            Placeholder.component("mm_name", mm_name))
+                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: <mm_cmd> <mm_name> <mm_cmd_item>",
+                            Placeholder.component("mm_cmd", mm_cmd),
+                            Placeholder.component("mm_name", mm_name),
+                            Placeholder.component("mm_cmd_item", mm_cmd_item))
                     );
                     return true;
                 }
@@ -288,10 +332,12 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                 }
             }
 
-            else if (args[1].equalsIgnoreCase("command")) {
+            else if (args[1].equalsIgnoreCase("command") || args[1].equals("명령어")) {
                 if (args.length < 4) {
-                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: /itemtrigger <mm_name> command <mm_type> <mm_force> <mm_command>",
+                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: <mm_cmd> <mm_name> <mm_cmd_command> <mm_type> <mm_force> <mm_command>",
+                            Placeholder.component("mm_cmd", mm_cmd),
                             Placeholder.component("mm_name", mm_name),
+                            Placeholder.component("mm_cmd_command", mm_cmd_command),
                             Placeholder.component("mm_type", mm_type),
                             Placeholder.component("mm_force", mm_force),
                             Placeholder.component("mm_command", mm_command))
@@ -316,7 +362,6 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                             case LEFT -> "왼쪽 클릭";
                             case RIGHT -> "오른쪽 클릭";
                             case SWAP -> "손 바꾸기";
-                            case DROP -> "떨어트리기";
                         };
                     } catch (IllegalArgumentException e) {
                         player.sendMessage(mm.deserialize(PREFIX + "<red>올바르지 않은 타입입니다."));
@@ -375,10 +420,12 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                 }
             }
 
-            else if (args[1].equalsIgnoreCase("delcmd")) {
+            else if (args[1].equalsIgnoreCase("delcmd") || args[1].equals("명령어제거")) {
                 if (args.length != 3) {
-                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: /itemtrigger <mm_name> delcmd <mm_type>",
+                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: <mm_cmd> <mm_name> <mm_cmd_delcmd> <mm_type>",
+                            Placeholder.component("mm_cmd", mm_cmd),
                             Placeholder.component("mm_name", mm_name),
+                            Placeholder.component("mm_cmd_delcmd", mm_cmd_delcmd),
                             Placeholder.component("mm_type", mm_type))
                     );
                     return true;
@@ -389,7 +436,7 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                     return true;
                 }
 
-                String typeStr = args[2];
+                String typeStr = args[2].toUpperCase();
                 TriggerType type;
                 String typeName;
                 try {
@@ -398,7 +445,6 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                         case LEFT -> "왼쪽 클릭";
                         case RIGHT -> "오른쪽 클릭";
                         case SWAP -> "손 바꾸기";
-                        case DROP -> "떨어트리기";
                     };
                 } catch (IllegalArgumentException e) {
                     player.sendMessage(mm.deserialize(PREFIX + "<red>올바르지 않은 타입입니다."));
@@ -418,10 +464,12 @@ public class ItemTriggerCommand implements TabCompleter, CommandExecutor {
                 return true;
             }
 
-            else if (args[1].equalsIgnoreCase("rename")) {
+            else if (args[1].equalsIgnoreCase("rename") || args[1].equals("이름")) {
                 if (args.length != 3) {
-                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: /itemtrigger <mm_name> rename [새 이름]",
-                            Placeholder.component("mm_name", mm_name))
+                    player.sendMessage(mm.deserialize(PREFIX + "<red>올바른 사용법: <mm_cmd> <mm_name> <mm_cmd_rename> [새 이름]",
+                            Placeholder.component("mm_cmd", mm_cmd),
+                            Placeholder.component("mm_name", mm_name),
+                            Placeholder.component("mm_cmd_rename", mm_cmd_rename))
                     );
                     return true;
                 }

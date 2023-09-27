@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -68,34 +67,18 @@ public class TriggerListener implements Listener {
     public static void onSwap(PlayerSwapHandItemsEvent e) {
         Player player = e.getPlayer();
 
-        ItemStack item = e.getMainHandItem();
+        ItemStack item = e.getOffHandItem();
         if (item == null || item.getType().isAir())
             return;
+
+        item = item.clone();
+        item.setAmount(1);
 
         Trigger trigger = Trigger.getTrigger(item);
         if (trigger == null)
             return;
 
         TriggerCommand triggerCommand = trigger.getCommand(TriggerType.SWAP);
-        if (triggerCommand != null) {
-            e.setCancelled(true);
-            performCommand(triggerCommand, player);
-        }
-    }
-
-    @EventHandler
-    public static void onDrop(PlayerDropItemEvent e) {
-        Player player = e.getPlayer();
-
-        ItemStack item = e.getItemDrop().getItemStack();
-        if (item.getType().isAir())
-            return;
-
-        Trigger trigger = Trigger.getTrigger(item);
-        if (trigger == null)
-            return;
-
-        TriggerCommand triggerCommand = trigger.getCommand(TriggerType.DROP);
         if (triggerCommand != null) {
             e.setCancelled(true);
             performCommand(triggerCommand, player);
